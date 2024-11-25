@@ -1,1 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sales Commission Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Sales Commission Calculator</h1>
+    <form id="salesForm">
+        <label for="salesperson">Salesperson Name:</label>
+        <input type="text" id="salesperson" name="salesperson" required>
+        <button type="button" id="addSale">Add Sale</button>
+        <input type="button" id="done" value="Done">
+    </form>
+    <div id="results"></div>
+
+    <script>
+        let sales = [];
+
+        document.getElementById('addSale').addEventListener('click', function() {
+            let sale = prompt("Enter sale amount in dollars and cents (e.g., 123.45):");
+            if (sale !== null && sale.trim() !== "") {
+                let saleAmount = parseFloat(sale);
+                if (!isNaN(saleAmount) && saleAmount >= 0) {
+                    sales.push(saleAmount);
+                } else {
+                    alert("Invalid input. Please enter a valid dollar amount.");
+                }
+            }
+        });
+
+        document.getElementById('done').addEventListener('click', function() {
+            const salesperson = document.getElementById('salesperson').value;
+            if (salesperson.trim() === "") {
+                alert("Please enter the salesperson's name.");
+                return;
+            }
+            let totalSales = 0;
+            for (let sale of sales) {
+                totalSales += sale;
+            }
+            let commissionRate = 0;
+            if (totalSales > 0) {
+                if (totalSales < 500) {
+                    commissionRate = 0.05;
+                } else if (totalSales < 1000) {
+                    commissionRate = 0.10;
+                } else {
+                    commissionRate = 0.15;
+                }
+            }
+            let commission = totalSales * commissionRate;
+            let totalEarnings = totalSales + commission;
+            document.getElementById('results').innerHTML = `
+                <p>Hello ${salesperson}, Here is your Weekly Commission Report.</p>
+                <p>Your sales total is $${totalSales.toFixed(2)}, so your commission rate is ${(commissionRate * 100).toFixed(2)}%.</p>
+                <p>Your total commission is $${commission.toFixed(2)}.</p>
+                <p>Your total earnings are $${totalEarnings.toFixed(2)}.</p>
+            `;
+        });
+    </script>
+</body>
+</html>
 
